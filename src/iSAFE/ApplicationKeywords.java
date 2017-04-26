@@ -4763,7 +4763,7 @@ public class ApplicationKeywords extends APIKeywords {
 					testStepPassed("Profile name is --" + profileName);
 					waitTime(2);
 					clickOn(OR.btn_Lists_Page_Next);
-					clickOn(OR.btn_Lists_Page_Previoust);
+					//clickOn(OR.btn_Lists_Page_Previoust);
 					waitTime(3);
 
 					waitForElement(OR.btn_Lists_Page_See_Full_Profile);
