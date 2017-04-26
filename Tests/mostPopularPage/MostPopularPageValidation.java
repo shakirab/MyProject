@@ -429,36 +429,7 @@ public class MostPopularPageValidation extends ApplicationKeywords {
 
 
 	
-	/**
-	 * Validate popular galleries.
-	 */
-	public void validatePopularGalleries()
-	{
-		testStepInfo("*************************** Popular Gallery ******************************************");
-		try {
-			scrollBy(0, -650);
-			boolean gallery=elementPresent(OR.btn_Mob_Most_Popular_Page_Galleries);
-			
-			//waitTime(10);
-			if(gallery==true)
-			{
-				waitTime(3);
-				
-				
-				//swipeToLeft();
-				waitTime(3);
-			testStepPassed("Popular Galleries is swipped");
-			}
-			else
-			{
-				testStepFailed("Popular Galleries can not be swipped");
-			}
-		
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			writeToLogFile("ERROR", "Exception: " + e.toString());
-		}
-	}
+	
 	
 	
 

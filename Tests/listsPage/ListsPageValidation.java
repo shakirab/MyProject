@@ -185,7 +185,7 @@ public class ListsPageValidation extends ApplicationKeywords {
 				testStepPassed("Profile name is --" + profileName);
 				waitTime(2);
 				clickOn(OR.btn_Lists_Page_Next);
-				clickOn(OR.btn_Lists_Page_Previoust);
+				//clickOn(OR.btn_Lists_Page_Previoust);
 				waitTime(3);
 				boolean seeFullProfile = elementPresent(OR.btn_Lists_Page_See_Full_Profile);
 				if (seeFullProfile == true) {
