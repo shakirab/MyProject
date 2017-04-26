@@ -16,9 +16,9 @@ public class LoginPageValidation extends ApplicationKeywords {
 	BaseClass obj;
 
 	// //////////////////////////////////////////////////////////////////////////////
-	// Function Name :Login Page Validation
+	// Function Name :Login  Page Validation
 	// Created by :Shakira
-	// Created on :24 August 2016
+	// Created on :Dec 2016
 
 	// ///////////////////////////////////////////////////////////////////////////////
 
@@ -32,25 +32,32 @@ public class LoginPageValidation extends ApplicationKeywords {
 	}
 
 	public void validateLoginPage() {
-		testStepInfo("************************************** Login Page *****************************************");
+		
 
-		if (currentExecutionMachineName.equalsIgnoreCase("Wel_HP_Article")) {
-
+		if (currentExecutionMachineName.equalsIgnoreCase("Wel_HP_Article_LvlUp")) {
+			testStepInfo("**************** Login Page *******************");
 			verifyLoginForm();
 			verifyLoginPage();
 
-			validateLoginThroughAvatarLogin();
-			validateLoginThroughAvatar();
-			
-			 
-			//validateEditToolLogin();
 			
 		}
+		else if(currentExecutionMachineName.equalsIgnoreCase("AndroidMobile"))
+		{
+			verifyLoginForm();
+			verifyLoginPage();
+			
+		}
+		else
+		{
+			verifyLoginForm();
+			verifyLoginPage();
+		}
+			
 	}
 	
 	public void validateEditToolLogin()
 	{
-		testStepInfo("************************************** Edit Tool Login Page *****************************************");
+		testStepInfo("************** Edit Tool Login Page *********************");
 		try {
 			//driver.get("https://edittools.forbes.com/");
 			
@@ -91,6 +98,64 @@ public class LoginPageValidation extends ApplicationKeywords {
 			writeToLogFile("ERROR", "Exception: " + e.toString());
 		}
 	}
+	
+	public void verifyLoginSuccessful()
+	{
+		try {
+			boolean checkLoggedIcon=elementPresent(OR.icon_LoginPage_LoggedIcon);
+			if(checkLoggedIcon==true)
+			{
+				clickOn(OR.icon_LoginPage_LoggedIcon);
+				boolean checkUserName=elementPresent(OR.txt_LoginPage_UserName);
+				if(checkUserName==true)
+				{
+					String getUserName=getText(OR.txt_LoginPage_UserName);
+					testStepPassed("Logged In user name is present --"+getUserName);
+				}
+				else
+				{
+					testStepFailed("Logged In User name is not present");
+				}
+				
+				boolean checkLogout=elementPresent(OR.txt_LoginPage_Logout);
+				if(checkLogout==true)
+				{
+					clickOn(OR.txt_LoginPage_Logout);
+					boolean checkLogoutSuccessMessage=elementPresent(OR.txt_LoginPage_Logout_Message);
+					if(checkLogoutSuccessMessage==true)
+					{
+						String getLogoutMessage=getText(OR.txt_LoginPage_Logout_Message);
+						
+						testStepPassed("Logoout is successful--"+getLogoutMessage);
+						boolean checkLogoutClose=elementPresent(OR.btn_LoginPage_Close);
+						if(checkLogoutClose==true)
+						{
+							clickOn(OR.btn_LoginPage_Close);
+							testStepPassed("Logout window close button is closed");
+						}
+						else
+						{
+							testStepFailed("Logout window close button is not closed");
+						}
+					}
+					else
+					{
+						testStepFailed("Logout Successfull message is not present");
+					}
+				}
+				else
+				{
+					testStepFailed("Logout link is not present");
+				}
+			}
+			else
+			{
+				testStepFailed("Logged In Icon is not present");
+			}
+		} catch (Exception e) {
+			writeToLogFile("ERROR", "Exception: " + e.toString());
+		}
+	}
 
 	public void verifyLoginPage() {
 
@@ -103,6 +168,29 @@ public class LoginPageValidation extends ApplicationKeywords {
 			typeIn(OR.txt_Login_Page_User_Name, retrieve("txtUserName"));
 			typeIn(OR.txt_Login_Page_Password, retrieve("txtPassword"));
 			clickOn(OR.btn_Login_Page_Login);
+			
+			boolean checkLoginSuccessmessage=elementPresent(OR.txt_LoginPage_Success_Message);
+			if(checkLoginSuccessmessage==true)
+			{
+				String getLoginMessage=getText(OR.txt_LoginPage_Success_Message);
+				testStepPassed("Login is successful--"+getLoginMessage);
+				boolean checkCloseButton=elementPresent(OR.btn_LoginPage_Close);
+				if(checkCloseButton==true)
+				{
+					clickOn(OR.btn_LoginPage_Close);
+					testStepPassed("Login window close button is closed"); 
+					
+					verifyLoginSuccessful();
+				}
+				else
+				{
+					testStepFailed("Login window close button is not present");
+				}
+			}
+			else
+			{
+				testStepFailed("Login is failed");
+			}
 			}
 			else
 			{
@@ -113,7 +201,7 @@ public class LoginPageValidation extends ApplicationKeywords {
 			// elementPresent(OR.txt_Login_Page_Error_Message);
 			// boolean fieldError =
 			// elementPresent(OR.txt_Login_Page_Field_Req_Error);
-			boolean user = elementPresent(OR.txt_Login_Page_User_Link);
+			/*boolean user = elementPresent(OR.txt_Login_Page_User_Link);
 			if (user == true) {
 
 				String userName = getText(OR.txt_Login_Page_User_Link);
@@ -126,7 +214,7 @@ public class LoginPageValidation extends ApplicationKeywords {
 
 				testStepFailed("Invalid User Name and Password");
 
-			}
+			}*/
 		} catch (Exception e) {
 			writeToLogFile("ERROR", "Exception: " + e.toString());
 		}
@@ -134,7 +222,7 @@ public class LoginPageValidation extends ApplicationKeywords {
 
 	public void validateLoginThroughAvatar() {
 
-		testStepInfo("***************************************** Login Through Avatar******************************************");
+		testStepInfo("******************* Login Through Avatar********************");
 		try {
 			waitTime(5);
 			boolean loginAcctBtn = elementPresent(OR.btn_Login_Page_Account);
@@ -153,7 +241,7 @@ public class LoginPageValidation extends ApplicationKeywords {
 	public Actions action = new Actions(driver);
 
 	public void validateLoginThroughAvatarLogin() {
-		testStepInfo("***************************************** Avatar Login ******************************************");
+		testStepInfo("**************** Avatar Login *****************");
 		try {
 
 			waitTime(8);
