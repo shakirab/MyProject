@@ -11,7 +11,7 @@ public class searchPageFunctionality extends ApplicationKeywords{
 	
 	BaseClass obj;
 	String searchEntity="mark zuckerberg";
-	String searchContributor="lewis dvorkin";
+	String searchContributor="Lewis Dvorkin";
 
 	// //////////////////////////////////////////////////////////////////////////////
 	// Function Name :
@@ -51,6 +51,8 @@ public class searchPageFunctionality extends ApplicationKeywords{
 			verifySearchPageContentsInDesktop();
 
 		} else {
+			
+			
 			verifySearchPageContentsInMobile();
 		}
 	}
@@ -58,38 +60,54 @@ public class searchPageFunctionality extends ApplicationKeywords{
 	 * Validating search page contents on desktop
 	 */
 	public void verifySearchPageContentsInDesktop(){	
-		validatePageLoadTime("http://www.forbes.com/search/?nowelcome'",15,"Search Page");
-		navigateTo("http://www.forbes.com/");
+		validatePageLoadTime("https://www.forbes.com/search/?nowelcome'",17,"Search Page");
+		navigateTo("https://www.forbes.com/");
 		entitySearch();
 		profileSearchCheck();
 		hashtagClickSearchCheck();
 	}
 	
 	public void verifySearchPageContentsInMobile(){
-		validatePageLoadTime("http://www.forbes.com/search/?nowelcome'",15,"Search Page");
-		navigateTo("http://www.forbes.com/");
-		clickOn(OR.img_Mob_Home_Page_Search);
-		typeIn(OR.txt_searchPageMobile_textboxOnHomePage, searchEntity);
-		webElement.sendKeys(Keys.ENTER);	
+		
+		
+		validatePageLoadTime("https://www.forbes.com/",15,"Search Page");
+		//navigateTo("https://www.forbes.com/");
+		verifySearchPagePassingString(searchEntity);
 		validateSearchPageFields(searchEntity);
 		validateSearchPageAdsInMobile();
 		verifySearchPageArticleStreamAndSeeMore();
-		scrollBy(0, 200);
-		clickOn(OR.button_searchPage_SeeMore);
-		waitTime(2);
-		int countAfterClickonSeemore = getElementCount(OR.articles_searchPage_SearchResultArticleStream);
-		if(countAfterClickonSeemore==20){
-			testStepPassed("Search Page--> Articles are loaded upon clicking see more button");
+		
+		boolean checkSeeMoreButton=elementPresent(OR.button_searchPage_SeeMore);
+		if(checkSeeMoreButton==true)
+		{
+			this.scrollToElement(OR.button_searchPage_SeeMore);
+			this.scrollBy(0, -60);
+			clickOn(OR.button_searchPage_SeeMore);
+
+			
+			waitTime(2);
+			int countAfterClickonSeemore = getElementCount(OR.articles_searchPage_SearchResultArticleStream);
+			if(countAfterClickonSeemore==20){
+				testStepPassed("Search Page--> Articles are loaded upon clicking see more button");
+			}
+			else{
+				testStepFailed("Search Page--> Articles are not loaded upon clicking see more button");
+			}
+			
 		}
-		else{
-			testStepFailed("Search Page--> Articles are not loaded upon clicking see more button");
+		else
+		{
+			testStepFailed("See More Button is not displayed");
 		}
+		
 		waitTime(1);
 		((JavascriptExecutor) driver).executeScript("window.scrollBy(0,-5000)");
 		clickOn(OR.txt_searchPage_SearchResultDate);
+		//verifyArticleOnClickingDate();
 		verifySearchPageArticleStreamAndSeeMore();
 		profileSearchCheckMobile();
 		hashtagClickSearchCheckMobile();
+		
 		
 	}
 	public void validateSearchPageAdsInMobile(){
@@ -133,49 +151,49 @@ public class searchPageFunctionality extends ApplicationKeywords{
 	}
 	
 	public void profileSearchCheckMobile(){
-		testStepInfo("**************************************** Profile Search ********************************");
 		clearEditBox(OR.txtbox_searchPage_SearchTextBox);
 		typeIn(OR.txtbox_searchPage_SearchTextBox, searchContributor);
 		webElement.sendKeys(Keys.ENTER);
 		validateSearchPageFields(searchContributor);
 		validateSearchPageAdsInMobile();
 		verifySearchPageArticleStreamAndSeeMore();
-		scrollBy(0,2000);
-	boolean seeMore=	elementPresent(OR.button_searchPage_SeeMore);
-	if(seeMore==true)
-	{
-		scrollBy(0, -300);
+		boolean checkSeeMoreButton=elementPresent(OR.button_searchPage_SeeMore);
+		if(checkSeeMoreButton==true)
+		{
+		scrollBy(0,300);
+		this.scrollToElement(OR.button_searchPage_SeeMore);
+		this.scrollBy(0, -60);
 		clickOn(OR.button_searchPage_SeeMore);
-	}
-	else
-	{
-		testStepFailed("See More Button is not loaded");
-	}
 		waitTime(1);
 		((JavascriptExecutor) driver).executeScript("window.scrollBy(0,-5000)");
 		clickOn(OR.txt_searchPage_SearchResultDate);
 		verifyArticleOnClickingDate();
+		}
+		else
+		{
+			testStepFailed("See More Button is not present");
+		}
+		
 		
 	}
 	
 	public void hashtagClickSearchCheckMobile(){
-		testStepInfo("*********************Hash tag Check ***************************");
 		clickSearchhashtag();
 		verifyDateLink();
 		validateSearchPageAdsInMobile();
 		verifySearchPageArticleStreamAndSeeMore();
-		scrollBy(0, -200);
-		boolean seeMore=elementPresent(OR.button_searchPage_SeeMore);
-		if(seeMore==true)
+		boolean checkSeeMore=elementPresent(OR.button_searchPage_SeeMore);
+		if(checkSeeMore==true)
 		{
+			this.scrollToElement(OR.button_searchPage_SeeMore);
+			this.scrollBy(0, -60);
 		clickOn(OR.button_searchPage_SeeMore);
 		}
 		else
 		{
-			testStepFailed("See More Button is not loaded");
+			testStepFailed("See More Button is not present");
 		}
 	}
-		
 	public void entitySearch(){
 		verifySearchPagePassingString(searchEntity);
 		validateSearchPageFields(searchEntity);
@@ -225,7 +243,8 @@ public class searchPageFunctionality extends ApplicationKeywords{
 	 */
 	public void verifySearchPagePassingString(String str){
 		testStepInfo("*********************************Passing the search string in the text box**********************************");
-		typeIn(OR.txt_searchPage_textboxOnHomePage, str);
+		clickOn(OR.icon_HomePage_Search);
+		typeIn(OR.txt_HomePage_SearchField, str);
 		webElement.sendKeys(Keys.ENTER);	
 	}
 	/*
@@ -363,8 +382,7 @@ public class searchPageFunctionality extends ApplicationKeywords{
 		else{
 			testStepFailed("Search Page--> Search page article stream count is "+searchPageArticleStreamCount+" and id not expected");
 		}
-		//scrollBy(0, 1000);
-		boolean isButtonDisplayed = elementPresent(OR.button_searchPage_SeeMore);
+		boolean isButtonDisplayed = isElementDisplayed(OR.button_searchPage_SeeMore);
 		if(isButtonDisplayed==true){
 			testStepPassed("Search Page--> See more button is displayed");
 		}
@@ -388,7 +406,17 @@ public class searchPageFunctionality extends ApplicationKeywords{
 			testStepPassed("Search Page--> Latest post and the first post are same when sorted by Date");
 		}
 		else{
-			testStepFailed("Search Page--> Latest post and the first post are different when sorted by Date");
+			testStepInfo("Search Page--> Latest post and the first post are different when sorted by Date");
+			clickOn(OR.articles_searchPage_FirstPost);
+			boolean b = driver.getPageSource().contains(searchContributor);
+			if(b == true)
+			{
+				testStepPassed("Search Page--> First post has the parameter searched for");
+			}
+			else{
+				testStepFailed("Search Page--> First post does not have the parameter searched for and the article is not related to the search parameter");
+			}
+			driver.navigate().back();
 		}
 	}
 	
